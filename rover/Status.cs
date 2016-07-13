@@ -46,7 +46,7 @@ namespace rover
 		#endregion
 
 		#region getSet
-
+		/*Status sendable [27 bytes]*/
 		public int leftSpeed { get { return _leftSpeed; } set { _leftSpeed = value; } }
 		public byte leftBrake { get { return _leftBrake; } set { _leftBrake = value; } }
 
@@ -66,6 +66,20 @@ namespace rover
 
 		public byte I2CAddress  { get { return _I2CAddress; } set { _I2CAddress = value; } }
 		public byte I2cClock    { get { return _I2CClock; } set { _I2CClock = value; } }
+
+		/*Status readable [24 bytes]*/
+		public int batteryVoltage { get { return _batteryVoltage; } }
+		public int leftCurrent { get { return _leftCurrent; } }
+		public int leftEncoder { get { return _leftEncoder; } }
+		public int rightCurrent { get { return _rightCurrent; } }
+		public int rightEncoder { get { return _rightEncoder; } }
+		public int Xaxis { get { return _Xaxis; } }
+		public int Yaxis { get { return _Yaxis; } }
+		public int Zaxis { get { return _Zaxis; } }
+		public int deltaX { get { return _deltaX; } }
+		public int deltaY { get { return _deltaY; } }
+		public int deltaY { get { return _deltaZ; } }
+
 		#endregion
 
 		public Status()

@@ -7,11 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-			<TextBox x:Name="HelloMessage" Text="Choose text" Margin="10" IsReadOnly="False"/>
-			<Button x:Name="Send" Content="Click Me!"  Margin="10" HorizontalAlignment="Center" Click="ClickMe_Click"/>
-			<TextBlock x:Name="boxReception" Text="Text input" Margin="10" HorizontalAlignment="Center"/>
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<TextBlock Text="Live capture" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="10"/>
+
+		<StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center">
+			<TextBox x:Name="xBox" IsReadOnly="True" Header="X Axis" Margin="10" Text="nothing yet"/>
+			<TextBox x:Name="yBox" IsReadOnly="True" Header="Y Axis" Margin="10" Text="nothing yet"/>
+			<TextBox x:Name="zBox" IsReadOnly="True" Header="Z Axis" Margin="10" Text="nothing yet"/>
 		</StackPanel>
+
+		<StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center">
+			<TextBox x:Name="xdBox" IsReadOnly="True" Header="Delta X" Margin="10" Text="nothing yet"/>
+			<TextBox x:Name="ydBox" IsReadOnly="True" Header="Delta Y" Margin="10" Text="nothing yet"/>
+			<TextBox x:Name="zdBox" IsReadOnly="True" Header="Delta Z" Margin="10" Text="nothing yet"/>
+		</StackPanel>
+
+
 	</Grid>
 </Page>

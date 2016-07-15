@@ -84,32 +84,78 @@ namespace rover
 
 		#endregion
 
+		I2cDevice device;
+
 		public Status()
 		{
 			SetupVar();
-			send();
+			SetupI2C();
 		}
 
-		public async void send()
+		private async void SetupI2C()
 		{
-			// Get a selector string for bus "I2C1"
-			string aqs = I2cDevice.GetDeviceSelector("I2C1");
+			var dis = await DeviceInformation.FindAllAsync(I2cDevice.GetDeviceSelector());
+			var i2cDevice = await I2cDevice.FromIdAsync(dis[0].Id, new I2cConnectionSettings(0x07));
+		}
 
-			// Find the I2C bus controller with our selector string
-			var dis = await DeviceInformation.FindAllAsync(aqs);
-			if (dis.Count == 0)
-				return; // bus not found
+		public void update()
+		{
+			
+			byte[] writeBuf = BuildBuffer();
+			device.Write(writeBuf);
+			byte[] readBuf = new byte[24];
+			device.Read(readBuf);
+			ReadBuffer(readBuf);
+		}
 
-			// 0x40 is the I2C device address
-			var settings = new I2cConnectionSettings(0x07);
+		private void ReadBuffer(byte[] buffer)
+		{
+			_StartRecv = buffer[0];
+			_errorFlag = buffer[1];
 
-			// Create an I2cDevice with our selected bus controller and I2C settings
-			using (I2cDevice device = await I2cDevice.FromIdAsync(dis[0].Id, settings))
-			{
-				byte[] writeBuf = BuildBuffer();
-				device.Write(writeBuf);
-			}
-			return;
+			_batteryVoltage = 0;
+			_batteryVoltage += (UInt16)(buffer[2] << 8);
+			_batteryVoltage += (UInt16)buffer[3];
+
+			_leftCurrent = 0;
+			_leftCurrent += (Int16)(buffer[4] << 8);
+			_leftCurrent += (Int16)buffer[5];
+
+			_leftEncoder = 0;
+			_leftEncoder += (UInt16)(buffer[6] << 8);
+			_leftEncoder += (UInt16)buffer[7];
+
+			_rightCurrent = 0;
+			_rightCurrent += (Int16)(buffer[8] << 8);
+			_rightCurrent += (Int16)buffer[9];
+
+			_rightEncoder = 0;
+			_rightEncoder += (UInt16)(buffer[10] << 8);
+			_rightEncoder += (UInt16)buffer[11];
+
+			_Xaxis = 0;
+			_Xaxis += (Int16)(buffer[12] << 8);
+			_Xaxis += (Int16)buffer[13];
+
+			_Yaxis = 0;
+			_Yaxis += (Int16)(buffer[14] << 8);
+			_Yaxis += (Int16)buffer[15];
+
+			_Zaxis = 0;
+			_Zaxis += (Int16)(buffer[16] << 8);
+			_Zaxis += (Int16)buffer[17];
+
+			_deltaX = 0;
+			_deltaX += (Int16)(buffer[18] << 8);
+			_deltaX += (Int16)buffer[19];
+
+			_deltaY = 0;
+			_deltaY += (Int16)(buffer[20] << 8);
+			_deltaY += (Int16)buffer[21];
+
+			_deltaZ = 0;
+			_deltaZ += (Int16)(buffer[22] << 8);
+			_deltaZ += (Int16)buffer[23];
 		}
 
 		private byte[] BuildBuffer()

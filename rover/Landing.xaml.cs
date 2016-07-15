@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage.Streams;
+using Windows.Networking.Sockets;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -24,19 +25,48 @@ namespace rover
     public sealed partial class MainPage : Page
     {
 		Status roverStatus;
-
+		StreamSocketListener serverSocket;
 		public MainPage()
 		{
 			this.InitializeComponent();
-			roverStatus = new Status();
+			//roverStatus = new Status();
 			DispatcherTimer timer = new DispatcherTimer();
 			timer.Interval = TimeSpan.FromSeconds(1);
 			timer.Tick += Timer_Tick;
-			timer.Start();
-        }
+			//timer.Start();
+			StartServer();
+		}
+
+		private async void StartServer()
+		{
+			try
+			{
+				serverSocket = new StreamSocketListener();
+				serverSocket.ConnectionReceived += ServerSocket_ConnectionReceived;
+				await serverSocket.BindServiceNameAsync("5464");
+			}
+			catch(Exception e)
+			{
+				val.Text = e.ToString();
+			}
+		}
+
+		private async void ServerSocket_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+		{
+			val.Text = "CONNECTED";
+			Stream inputStream = args.Socket.InputStream.AsStreamForRead();
+			StreamReader reader = new StreamReader(inputStream);
+			string request = await reader.ReadLineAsync();
+
+			Stream outputStream = args.Socket.OutputStream.AsStreamForWrite();
+			StreamWriter writter = new StreamWriter(outputStream);
+			await writter.WriteLineAsync("Ok");
+			await writter.FlushAsync();
+		}
 
 		private void Timer_Tick(object sender, object e)
 		{
+			roverStatus.update();
 			xBox.Text = roverStatus.Xaxis.ToString();
 			yBox.Text = roverStatus.Yaxis.ToString();
 		}

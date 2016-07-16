@@ -13,20 +13,16 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 
-		<TextBlock x:Name="val" Text="Live capture" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="10"/>
-
-		<StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center">
-			<TextBox x:Name="xBox" IsReadOnly="True" Header="X Axis" Margin="10" Text="nothing yet"/>
-			<TextBox x:Name="yBox" IsReadOnly="True" Header="Y Axis" Margin="10" Text="nothing yet"/>
-			<TextBox x:Name="zBox" IsReadOnly="True" Header="Z Axis" Margin="10" Text="nothing yet"/>
+		<StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20">
+			<TextBlock Text="Pitch" FontSize="30" Margin="10"/>
+			<TextBlock Text="Roll" FontSize="30" Margin="10"/>
+			<TextBlock Text="Yaw" FontSize="30" Margin="10"/>
 		</StackPanel>
 
-		<StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center">
-			<TextBox x:Name="xdBox" IsReadOnly="True" Header="Delta X" Margin="10" Text="nothing yet"/>
-			<TextBox x:Name="ydBox" IsReadOnly="True" Header="Delta Y" Margin="10" Text="nothing yet"/>
-			<TextBox x:Name="zdBox" IsReadOnly="True" Header="Delta Z" Margin="10" Text="nothing yet"/>
+		<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20">
+			<TextBlock x:Name="pitchBox" FontSize="30" Text="0.00" Margin="10"/>
+			<TextBlock x:Name="rollBox" FontSize="30" Text="0.00" Margin="10"/>
+			<TextBlock x:Name="yawBox" FontSize="30" Text="0.00" Margin="10"/>
 		</StackPanel>
-
-
 	</Grid>
 </Page>

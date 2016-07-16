@@ -7,10 +7,68 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-	<Grid Background="AliceBlue">
-		<StackPanel>
-			<TextBox x:Name="val" Text="no text yet" HorizontalAlignment="Center"/>
-			<Button Content="try" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center" Click="Button_Click"/>
+	<Grid >
+		<Grid.Background>
+			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+				<GradientStop Color="#FF31B1FA" Offset="1"/>
+				<GradientStop Color="#C4C1AEF6"/>
+			</LinearGradientBrush>
+		</Grid.Background>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<CommandBar x:Name="commandBar" ClosedDisplayMode="Minimal" IsOpen="False" Grid.ColumnSpan="3" Grid.Row="0">
+			<AppBarToggleButton x:Name="commandBarConnection" Content="Connect" Label="Connect" Click="commandBarConnection_Click"/>
+			<AppBarButton x:Name="commandBarSettings" Content="Settings" Label="Settings" Icon="Setting" Click="commandBarSettings_Click" />
+		</CommandBar>
+		
+		<Slider x:Name="sliderSpeed" TickFrequency="10" TickPlacement="Outside" SnapsTo="Ticks" Margin="30" Grid.Column="2" Grid.Row="1" IntermediateValue="0" Minimum="-100" Maximum="100" Orientation="Vertical" Foreground="Transparent">
+			<Slider.Background>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FF46FF00" Offset="0"/>
+					<GradientStop Color="#FF46FF00" Offset="1"/>
+					<GradientStop Color="#FFFF1700" Offset="0.509"/>
+					<GradientStop Color="#FFFFDD5D" Offset="0.234"/>
+					<GradientStop Color="#FFFFDD5D" Offset="0.779"/>
+				</LinearGradientBrush>
+			</Slider.Background>
+		</Slider>
+		
+		<StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+			<TextBlock Text="Pitch" Margin="10"/>
+			<TextBlock x:Name="pitchBox" Text="0.00" Margin="10"/>
+			<TextBlock Text="Roll" Margin="10"/>
+			<TextBlock x:Name="rollBox" Text="0.00" Margin="10"/>
+			<TextBlock Text="Yaw" Margin="10"/>
+			<TextBlock x:Name="yawBox" Text="0.00" Margin="10"/>
+		</StackPanel>
+
+		<StackPanel Grid.Column="1" Grid.Row="1">
+
+			<TextBox x:Name="statusBox" Margin="10"  Text="Disconnected" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="Red" BorderBrush="Transparent"/>
+			<Grid Grid.Row="0" Grid.Column="1" Margin="10" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Grid.Column="0" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock Text="Speed" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" Foreground="Black"/>
+					<TextBlock x:Name="speedBox" Text="00" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Foreground="Green"/>
+				</StackPanel>
+
+				<StackPanel Grid.Column="2"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+					<TextBlock Text="Battery" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" Foreground="Black"/>
+					<TextBlock Text="70" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Foreground="Orange"/>
+				</StackPanel>
+			</Grid>
 		</StackPanel>
 	</Grid>
 </Page>

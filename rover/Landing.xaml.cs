@@ -23,18 +23,19 @@ namespace rover
 		public MainPage()
 		{
 			this.InitializeComponent();
-			//roverStatus = new Status();
+			roverStatus = new Status();
 			server = new Server("5678");
 			DispatcherTimer timer = new DispatcherTimer();
-			timer.Interval = TimeSpan.FromMilliseconds(50);
+			timer.Interval = TimeSpan.FromMilliseconds(5000);
 			timer.Tick += Timer_Tick;
-			timer.Start();
+			roverStatus.update();
 		}
 
 		private void Timer_Tick(object sender, object e)
 		{
 			if (server.parse != null)
 			{
+				roverStatus.update();
 				pitchBox.Text = server.parse[0];
 				rollBox.Text = server.parse[1];
 				yawBox.Text = server.parse[2];

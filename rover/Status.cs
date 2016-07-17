@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
+using Windows.Devices.Gpio;
 
 namespace rover
 {
@@ -85,7 +86,6 @@ namespace rover
 		#endregion
 
 		I2cDevice device;
-
 		public Status()
 		{
 			SetupVar();
@@ -94,18 +94,24 @@ namespace rover
 
 		private async void SetupI2C()
 		{
-			var dis = await DeviceInformation.FindAllAsync(I2cDevice.GetDeviceSelector());
-			var i2cDevice = await I2cDevice.FromIdAsync(dis[0].Id, new I2cConnectionSettings(0x07));
+			var settings = new I2cConnectionSettings(0x07);
+			settings.BusSpeed = I2cBusSpeed.StandardMode;
+
+			var controller = await Windows.Devices.I2c.I2cController.GetDefaultAsync();
+			device = controller.GetDevice(settings);
 		}
 
-		public void update()
+		public async void update()
 		{
-			
-			byte[] writeBuf = BuildBuffer();
-			device.Write(writeBuf);
-			byte[] readBuf = new byte[24];
-			device.Read(readBuf);
-			ReadBuffer(readBuf);
+			try
+			{
+				byte[] writeBuf = { 0x01, 0x02, 0x03, 0x04 };
+				byte[] readBuf = new byte[24];
+				device.Write(writeBuf);
+				device.Read(readBuf);
+				ReadBuffer(readBuf);
+			}
+			catch (ArgumentOutOfRangeException e) { e.ToString(); }
 		}
 
 		private void ReadBuffer(byte[] buffer)

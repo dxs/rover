@@ -17,12 +17,14 @@
 			<TextBlock Text="Pitch" FontSize="30" Margin="10"/>
 			<TextBlock Text="Roll" FontSize="30" Margin="10"/>
 			<TextBlock Text="Yaw" FontSize="30" Margin="10"/>
+			<TextBox Text="error"/>
 		</StackPanel>
 
 		<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20">
 			<TextBlock x:Name="pitchBox" FontSize="30" Text="0.00" Margin="10"/>
 			<TextBlock x:Name="rollBox" FontSize="30" Text="0.00" Margin="10"/>
 			<TextBlock x:Name="yawBox" FontSize="30" Text="0.00" Margin="10"/>
+			<TextBox x:Name="errorBox"/>
 		</StackPanel>
 	</Grid>
 </Page>

@@ -26,7 +26,7 @@ namespace rover_controller
 		Com com;
 		bool isConnected = false;
 		Accelerometer accel;
-		string ip = "192.168.1.118";
+		string ip = "192.168.1.110";
 		string port = "5678";
 
 		public MainPage()

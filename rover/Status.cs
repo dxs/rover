@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
+using Windows.Devices;
 using Windows.Devices.I2c;
-using Windows.Devices.Gpio;
 
 namespace rover
 {
@@ -84,8 +84,8 @@ namespace rover
 		public int deltaZ { get { return _deltaZ; } }
 
 		#endregion
-
 		I2cDevice device;
+
 		public Status()
 		{
 			SetupVar();
@@ -101,11 +101,11 @@ namespace rover
 			device = controller.GetDevice(settings);
 		}
 
-		public async void update()
+		public void update()
 		{
 			try
 			{
-				byte[] writeBuf = { 0x01, 0x02, 0x03, 0x04 };
+				byte[] writeBuf = BuildBuffer();
 				byte[] readBuf = new byte[24];
 				device.Write(writeBuf);
 				device.Read(readBuf);

@@ -11,11 +11,13 @@ namespace rover
 	class Server
 	{
 		StreamSocketListener serverSocket;
+		Status roverState;
 		public string[] parse { get; set; }
 		private string port;
 
-		public Server(string _port)
+		public Server(string _port, Status _roverState)
 		{
+			roverState = _roverState;
 			port = _port;
 		}
 
@@ -45,9 +47,10 @@ namespace rover
 
 					parse = request.Split(':');
 
+					string toSend = roverState.batteryVoltage.ToString();
 					Stream outputStream = args.Socket.OutputStream.AsStreamForWrite();
 					StreamWriter writter = new StreamWriter(outputStream);
-					await writter.WriteLineAsync("Ok");
+					await writter.WriteLineAsync(toSend);
 					await writter.FlushAsync();
 				}
 				catch (Exception exp) { serverSocket.Dispose(); }

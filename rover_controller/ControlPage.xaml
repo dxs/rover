@@ -26,8 +26,25 @@
 		</Grid.RowDefinitions>
 		<CommandBar x:Name="commandBar" ClosedDisplayMode="Minimal" IsOpen="False" Grid.ColumnSpan="3" Grid.Row="0">
 			<AppBarToggleButton x:Name="commandBarConnection" Content="Connect" Label="Connect" Click="commandBarConnection_Click"/>
+			<AppBarButton x:Name="commandBarSetIP" Content="Set ip" Label="IP Adress">
+				<AppBarButton.Flyout>
+					<Flyout>
+						<StackPanel>
+							<TextBlock x:Name="ipbox" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" Text="IP : 192.168.1.118"/>
+							<TextBlock Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" Text="Port : 5678" />
+						</StackPanel>
+					</Flyout>
+				</AppBarButton.Flyout>
+			</AppBarButton>
+			<AppBarSeparator />
 			<AppBarButton x:Name="commandBarSettings" Content="Settings" Label="Settings" Icon="Setting" Click="commandBarSettings_Click" />
 		</CommandBar>
+
+		<ProgressBar x:Name="speedProgressBar"  Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Value="0" Minimum="-100" Maximum="100" RenderTransformOrigin="0.5,0.5">
+			<ProgressBar.RenderTransform>
+				<CompositeTransform Rotation="-90"/>
+			</ProgressBar.RenderTransform>
+		</ProgressBar>
 		
 		<Slider x:Name="sliderSpeed" TickFrequency="10" TickPlacement="Outside" SnapsTo="Ticks" Margin="30" Grid.Column="2" Grid.Row="1" IntermediateValue="0" Minimum="-100" Maximum="100" Orientation="Vertical" Foreground="Transparent">
 			<Slider.Background>
@@ -40,7 +57,7 @@
 				</LinearGradientBrush>
 			</Slider.Background>
 		</Slider>
-		
+
 		<StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
 			<TextBlock Text="Pitch" Margin="10"/>
 			<TextBlock x:Name="pitchBox" Text="0.00" Margin="10"/>
@@ -48,6 +65,8 @@
 			<TextBlock x:Name="rollBox" Text="0.00" Margin="10"/>
 			<TextBlock Text="Yaw" Margin="10"/>
 			<TextBlock x:Name="yawBox" Text="0.00" Margin="10"/>
+			<TextBlock Text="Var %" Margin="10"/>
+			<TextBlock x:Name="correctionBox" Text="0.00" Margin="10"/>
 		</StackPanel>
 
 		<StackPanel Grid.Column="1" Grid.Row="1">
@@ -66,9 +85,10 @@
 
 				<StackPanel Grid.Column="2"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
 					<TextBlock Text="Battery" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" Foreground="Black"/>
-					<TextBlock Text="70" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Foreground="Orange"/>
+					<TextBlock x:Name="batteryBox"  Text="70" Margin="10" FontSize="45" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Foreground="Orange"/>
 				</StackPanel>
 			</Grid>
+			<ProgressBar x:Name="tilt" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Value="0" Minimum="-100" Maximum="100"/>
 		</StackPanel>
 	</Grid>
 </Page>

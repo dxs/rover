@@ -12,6 +12,7 @@ namespace rover_controller
 	class Com
 	{
 		StreamSocket clientSocket;
+		public string error = "";
 		public Com()
 		{
 
@@ -32,7 +33,7 @@ namespace rover_controller
 				await clientSocket.ConnectAsync(serverHost, serverPort);
 				return true;
 			}
-			catch (Exception ex) { ex.ToString(); ComDisconnect(); return false; }
+			catch (Exception ex) { error = ex.ToString(); ComDisconnect(); return false; }
 		}
 
 		/// <summary>

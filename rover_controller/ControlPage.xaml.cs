@@ -28,10 +28,13 @@ namespace rover_controller
 		Accelerometer accel;
 		string ip = "192.168.1.110";
 		string port = "5678";
+		double pitch = 0.0;
+		double speed = 0;
 
 		public MainPage()
         {
             this.InitializeComponent();
+			ip = ipbox.Text;
 			com = new Com();
 			sliderSpeed.ValueChanged += SliderSpeed_ValueChanged;
 			commandBarConnection.Icon = new FontIcon
@@ -61,31 +64,56 @@ namespace rover_controller
 			accel = Accelerometer.GetDefault();
 			if (accel != null)
 			{
-				accel.ReportInterval = 0;
+				accel.ReportInterval = accel.MinimumReportInterval;
 				accel.ReadingChanged += new TypedEventHandler<Accelerometer, AccelerometerReadingChangedEventArgs>(ReadingChanged);
 			}
 		}
 
 		private async void ReadingChanged(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
 		{
-			await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+			AccelerometerReading reading = null;
+
+			await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
 			{
-				AccelerometerReading reading = args.Reading;
-				pitchBox.Text = String.Format("{0,5:0.000}", reading.AccelerationX);
-				rollBox.Text = String.Format("{0,5:0.000}", reading.AccelerationY);
-				yawBox.Text = String.Format("{0,5:0.000}", reading.AccelerationZ);
+				reading = args.Reading;
+				pitchBox.Text = String.Format("{0,5:0.00000}", reading.AccelerationX); //this one concern us
+				rollBox.Text = String.Format("{0,5:0.00000}", reading.AccelerationY);
+				yawBox.Text = String.Format("{0,5:0.00000}", reading.AccelerationZ);
 				string send = pitchBox.Text + ":" + rollBox.Text + ":" + yawBox.Text;
 				if (isConnected)
 				{
 					com.ComWrite(send);
-					com.ComRead();
+					string input = await com.ComRead();
+					DisplayValue(input);
 				}
-			});
+				computeAccel(reading.AccelerationX, reading.AccelerationY, reading.AccelerationZ);
+				correctionBox.Text = String.Format("{0,5:0.00000}", pitch);
+				tilt.Value = pitch;
+			});	
+		}
 
+		private void computeAccel(double _pitch, double _roll, double _yaw)
+		{
+			if (speed == 0)
+				speed = 1;
+			pitch = _pitch;//en pourcent
+			pitch *= 100;
+			pitch *= 1 - Math.Abs(speed) / 150;
+			if (pitch < -100)
+				pitch = -100;
+			if (pitch > 100)
+				pitch = 100;
+			pitch = (int)pitch;
+		}
+
+		private void DisplayValue(string input)
+		{
+			batteryBox.Text = input;
 		}
 
 		private void SliderSpeed_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
 		{
+			speed = (int)sliderSpeed.Value;
 			speedBox.Text = sliderSpeed.Value.ToString();
 		}
 
@@ -97,11 +125,12 @@ namespace rover_controller
 			else
 				isConnected = !com.ComDisconnect();
 
-			if(isConnected)
+			if (isConnected)
 			{
 				statusBox.Text = "Connected";
 				statusBox.Foreground = new SolidColorBrush(Windows.UI.Colors.Green);
 
+				commandBarConnection.IsChecked = true;
 				commandBarConnection.Content = "Disconnect";
 				commandBarConnection.Label = "Disconnect";
 				commandBarConnection.Icon = new FontIcon
@@ -112,8 +141,9 @@ namespace rover_controller
 			}
 			else
 			{
-				statusBox.Text = "Disconnected";
+				statusBox.Text = "Disconnected" + com.error;
 				statusBox.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
+				commandBarConnection.IsChecked = false;
 				commandBarConnection.Content = "Connect";
 				commandBarConnection.Label = "Connect";
 				commandBarConnection.Icon = new FontIcon
@@ -128,5 +158,6 @@ namespace rover_controller
 		{
 			commandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 		}
+
 	}
 }

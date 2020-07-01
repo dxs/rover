@@ -28,7 +28,7 @@ void setup()
 
 void convert_order(String order)//format LEFT[0-255],RIGHT[0-255];
 {
-  if (order == "SENSORS")
+  if(order.indexOf("SENSORS") >= 0)
   {
     MasterReceive();                                   // receive data packet from T'REX controller
     return;
@@ -42,6 +42,7 @@ void convert_order(String order)//format LEFT[0-255],RIGHT[0-255];
   lmspeed = atoi(token);
   token = strtok(NULL, delim);
   rmspeed = atoi(token);
+  Serial.println("OK");
 }
 
 void loop()

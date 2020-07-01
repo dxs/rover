@@ -1,4 +1,4 @@
-from rpi.controller.controller import Controller
+from controller.controller import Controller
 
 def main():
     control = Controller()

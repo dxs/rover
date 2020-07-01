@@ -1,8 +1,7 @@
-from controller import Controller
+from rpi.controller.controller import Controller
 
 def main():
-    with Controller as control:
-        pass
+    control = Controller()
 
 
 if __name__ == "__main__":

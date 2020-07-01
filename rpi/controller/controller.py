@@ -16,8 +16,11 @@ class Controller:
         return
 
     def run(self):
+        self.com.send('5,5,\n')
+        print(self.com.read())
         self.get_sensors()
 
     def get_sensors(self):
-        data = self.com.read('SENSORS')
+        self.com.send('SENSORS\n')
+        data = self.com.read()
         self.sensors.update(data)

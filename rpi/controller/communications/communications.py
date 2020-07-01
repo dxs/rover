@@ -6,19 +6,16 @@ class Communications:
 
     def __init__(self):
         self.ser = serial.Serial(
-            port='/dev/ttyS0',
+            port='/dev/ttyACM0',
             baudrate = 9600,
-            parity = serial.PARTY_NONE,
-            stopbits = serial.STOPBITS_ONE,
-            bytesize = serial.EIGHTBITS,
-            timeout = 1
-        )        
+            timeout = 3
+        )
+        self.ser.flush()
 
     def send(self, data):
-        ser.write(data)
+        self.ser.write(data.encode())
 
-    def read(self, command='SENSORS'):
-        self.send(command)
-        data = self.realines()
+    def read(self):
+        data = self.ser.readlines()
         return data
 

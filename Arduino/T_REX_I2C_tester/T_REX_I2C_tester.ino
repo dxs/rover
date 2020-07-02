@@ -54,7 +54,6 @@ void convert_order(String order)//format LEFT[0-255],RIGHT[0-255];
   lmspeed = atoi(token);
   token = strtok(NULL, delim);
   rmspeed = atoi(token);
-  Serial.println("OK");
   MasterSend(startbyte,2,lmspeed,lmbrake,rmspeed,rmbrake,sv[0],sv[1],sv[2],sv[3],sv[4],sv[5],devibrate,sensitivity,lowbat,i2caddr,i2cfreq);
 }
 

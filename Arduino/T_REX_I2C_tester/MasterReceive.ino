@@ -34,8 +34,8 @@ void MasterReceive()
   
   i=Wire.read()*256+Wire.read();                                  // T'REX battery voltage
   Serial.print("Battery Voltage:\t");
-  Serial.print(int(i/10));Serial.println(".");                      
-  Serial.print(i-(int(i/10)*10));Serial.println("V");
+  Serial.print(int(i/100));Serial.print(".");                      
+  Serial.print(i-(int(i/100)*100));Serial.println("V");
   
   i=Wire.read()*256+Wire.read();
   Serial.print("Left  Motor Current:\t");
@@ -86,4 +86,3 @@ void MasterReceive()
   
   
   
-

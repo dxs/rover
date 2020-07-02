@@ -18,9 +18,12 @@ int lowbat=700;                                      // adjust to suit your batt
 byte i2caddr=7;                                      // default I2C address of T'REX is 7. If this is changed, the T'REX will automatically store new address in EEPROM
 byte i2cfreq=0;                                      // I2C clock frequency. Default is 0=100kHz. Set to 1 for 400kHz
 unsigned int failsafe = 0;    //used to cancel motion in case of serial break out
+int distance_pin = A0;
+
+int distance = 0;
 
 void setup()
-{
+{  
   Serial.begin(9600);
   Wire.begin();                                      // no address - join the bus as master
 }
@@ -28,9 +31,15 @@ void setup()
 
 void convert_order(String order)//format LEFT[0-255],RIGHT[0-255];
 {
-  if(order.indexOf("SENSORS") >= 0)
+  if(order.indexOf("SEN") >= 0)
   {
     MasterReceive();                                   // receive data packet from T'REX controller
+    return;
+  }
+
+  if(order.indexOf("DIS") >= 0)
+  {
+    Serial.println(distance);
     return;
   }
   
@@ -49,10 +58,13 @@ void loop()
 {
                                                      // send data packet to T'REX controller 
   MasterSend(startbyte,2,lmspeed,lmbrake,rmspeed,rmbrake,sv[0],sv[1],sv[2],sv[3],sv[4],sv[5],devibrate,sensitivity,lowbat,i2caddr,i2cfreq);
+
+  //Get distance
+  distance = analogRead(distance_pin);
   delay(50);
   failsafe++;
   
-  if(failsafe >= FAILSAFE_TIMEOUT)
+  if(failsafe >= FAILSAFE_TIMEOUT || distance > 200) //approx 30cm distance
   {
     lmspeed = 0;
     rmspeed = 0;

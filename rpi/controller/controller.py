@@ -18,8 +18,7 @@ class Controller:
     def run(self):
         self.com.send('0,0,\n')
         while(True):
-            self.get_distance()
-            print(self.sensors.distance)
+            self.com.send('20,20,\n')
             time.sleep(0.2)
 
     def get_sensors(self):
@@ -30,4 +29,6 @@ class Controller:
     def get_distance(self):
         self.com.send('DIS\n')
         data = self.com.read()
-        self.sensors.distance = data
+        if len(data) > 0:
+            data = data[0].decode()
+            self.sensors.distance = int(data)

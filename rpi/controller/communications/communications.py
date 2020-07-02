@@ -7,8 +7,8 @@ class Communications:
     def __init__(self):
         self.ser = serial.Serial(
             port='/dev/ttyACM0',
-            baudrate = 9600,
-            timeout = 3
+            baudrate = 115200,
+            timeout = 0.1
         )
         self.ser.flush()
 

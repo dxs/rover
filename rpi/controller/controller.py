@@ -16,11 +16,18 @@ class Controller:
         return
 
     def run(self):
-        self.com.send('5,5,\n')
-        print(self.com.read())
-        self.get_sensors()
+        self.com.send('0,0,\n')
+        while(True):
+            self.get_distance()
+            print(self.sensors.distance)
+            time.sleep(0.2)
 
     def get_sensors(self):
-        self.com.send('SENSORS\n')
+        self.com.send('SEN\n')
         data = self.com.read()
         self.sensors.update(data)
+
+    def get_distance(self):
+        self.com.send('DIS\n')
+        data = self.com.read()
+        self.sensors.distance = data

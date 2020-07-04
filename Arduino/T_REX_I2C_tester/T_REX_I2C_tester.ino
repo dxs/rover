@@ -71,12 +71,15 @@ void loop()
     failsafe = 0;
     MasterSend(startbyte,2,lmspeed,lmbrake,rmspeed,rmbrake,sv[0],sv[1],sv[2],sv[3],sv[4],sv[5],devibrate,sensitivity,lowbat,i2caddr,i2cfreq);
   }
-  while (Serial.available() > 0) {
-    failsafe = 0;
-    // read the incoming byte:
-    String incoming;
-    incoming = Serial.readString();
-    convert_order(incoming);
+  else
+  {
+    while (Serial.available() > 0) {
+      failsafe = 0;
+      // read the incoming byte:
+      String incoming;
+      incoming = Serial.readString();
+      convert_order(incoming);
+    }
   }
 
   failsafe++;
